@@ -81,9 +81,3 @@ def update_iteration(current_iteration):
             next_iteration[-1].append(helper_current_cell(current_iteration, row, col))
         next_iteration.append([])
     return np.array(next_iteration[:-1])
-
-
-
-
-
-
