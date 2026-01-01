@@ -5,7 +5,7 @@ import gol_basic_simulation
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    game_configuartion = gol_basic_simulation.load_starting_configuration("cloverleaf.txt")
+    game_configuartion = gol_basic_simulation.load_starting_configuration("tests/glider.txt")
     total_iterations = int(input("Please enter valid iterations number: "))
 
     for current_iteration in range(total_iterations + 1):

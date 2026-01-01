@@ -1,12 +1,18 @@
+import numpy
 import numpy as np
-import os
 from numpy.f2py.auxfuncs import throw_error
-import time
 
+def check_correct_format_file(file_contents: str)-> None:
+    """checking if the file contains only valid characters - "." and "0" 
 
-# receive numpy array of contents
-# check validity of file
-def check_correct_format_file(file_contents: str):
+        Args:
+            file_contents: content of file received as a string. 
+
+        Returns:
+           nothing.
+
+        Raises:
+            TypeError: If the file contains invalid characters."""
     for char in file_contents:
         if not(char == "." or char == "o"):
             throw_error("invalid characters in file")
@@ -14,8 +20,18 @@ def check_correct_format_file(file_contents: str):
 # receive a configuration text file as a .txt file
 # return a numpy array that holds the configuration content
 
-def load_starting_configuration(txt_file_name):
-    # catch exception in case file name isn't valid
+def load_starting_configuration(txt_file_name: str) -> np.array:
+    """receive a configuration text file as a .txt file
+    return a numpy array that holds the configuration content
+
+        Args:
+            txt_file_name: file name in the wanted directory
+
+        Returns:
+           numpy array representing the table
+
+        Raises:
+            FileNotFoundError: if the file name isn't valid"""
     try:
         with open(txt_file_name, 'r') as f:
             file_contents = f.read()  # Read the entire file into a single string
@@ -37,15 +53,38 @@ def load_starting_configuration(txt_file_name):
 
 
 # prints current state of the simulation
-def print_simulation(current_state, current_iteration):
+def print_simulation(current_state: numpy.array, current_iteration: int) -> None:
+    """function to print the current iteration of the gol
+
+        Args:
+            current_state: numpy array representing gol
+            current_iteration: current iteration of the game
+
+        Returns:
+           None
+
+        Raises:
+            None"""
     print("current iteration: ", current_iteration)
-    #print every row for itself
+    # print every row for itself
     for row in current_state:
         print(*row)
 
 
 # determine wether the current cell should be dead or alive in the next iteration
-def determine_cell_state(live_cnt, current_value):
+def determine_cell_state(live_cnt: int, current_value: int) -> chr:
+    """function to return relevant character for one cell in accordance to
+        the number of live cells adjacent to it
+
+        Args:
+            live_cnt: number of live cells next to the current cell
+            current_value: current value of cell
+
+        Returns:
+           new value of the cell
+
+        Raises:
+            None"""
     if live_cnt == 3:
         return "o"
     if live_cnt == 2:
@@ -53,7 +92,19 @@ def determine_cell_state(live_cnt, current_value):
     return "."
 
 # helper function to update te state of a current cell in the simulation
-def helper_current_cell(current_iteration, row, col):
+def helper_current_cell(current_iteration: numpy.array, row: int, col: int) -> chr:
+    """used for determining the value of a cell in the next iteration of the program
+
+        Args:
+            current_iteration: numpy array representing the current state of the game
+            row: row of relevant cell
+            col: column of relevant cell
+
+        Returns:
+           needed value of the cell in the next iteration
+
+        Raises:
+            None"""
     live_cnt = 0 #counter for live cells that are adjacent to the current cell
     row_add = -1
 
@@ -74,16 +125,20 @@ def helper_current_cell(current_iteration, row, col):
 
 # update iteration of the game
 # returns the next iteration
-def update_iteration(current_iteration):
+def update_iteration(current_iteration: int) -> numpy.array:
+    """returns the game board in the next iteration based on the current one
+
+        Args:
+            current_iteration: numpy array representing the current state of the game
+
+        Returns:
+           game board in the next iteration based on the current one
+
+        Raises:
+            None"""
     next_iteration = [[]]
     for row in range(len(current_iteration)):
         for col in range(len(current_iteration[0])):
             next_iteration[-1].append(helper_current_cell(current_iteration, row, col))
         next_iteration.append([])
     return np.array(next_iteration[:-1])
-
-
-
-
-
-
