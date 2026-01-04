@@ -6,21 +6,6 @@ T_predator = 0
 R_herbivore_sight = 0
 R_predator_sight = 0
 
-
-def create_new_entity(curr_board, location):
-    # drill a random entity to put instead of the last one
-
-    type = rnd.randint(1,3)
-    #
-    if type == 1:
-        curr_board[location[0]][location[1]] = Plant(location[0], location[1])
-
-    elif type == 2:
-        curr_board[location[0]][location[1]] = Herbivore(location[0], location[1])
-
-    elif type == 3:
-        curr_board[location[0]][location[1]] = Predator(location[0], location[1])
-
 def kill_entity(curr_board, location):
     del curr_board[location[0]][location[1]]
     curr_board[location[0]][location[1]] = None
@@ -69,7 +54,6 @@ class Herbivore(BasicEntity):
     # a basic class for all instances in the program
     def update_iteration(self, curr_board, location):
         self.life_span -= 1
-
 
         if self.life_span == 0:
             self.kill_entity(curr_board, location)
