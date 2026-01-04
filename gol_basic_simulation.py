@@ -144,7 +144,8 @@ def helper_current_cell(current_iteration: np.array, row: int, col: int) -> chr:
             try:
                 # make sure no to compare the cell to itself
                 if check_validity_of_coordiantes(row, col, row_add, col_add):
-                    live_cnt += 1
+                    if current_iteration[row +row_add][col + col_add] == LIVE_CELL_SYMBOL:
+                        live_cnt += 1
             except IndexError:
                 pass
         row_add += 1
