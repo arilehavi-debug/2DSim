@@ -4,6 +4,12 @@ this module is in charge of the logic of running the basic gol program
 import numpy as np
 from numpy.f2py.auxfuncs import throw_error
 
+# CONSTS SEGMENT
+VALID_FILE_CHARACTERS = (".", "o")
+LIVE_CELL_SYMBOL = "o"
+DEAD_CELL_SYMBOL = "."
+FILE_NOT_FOUND_MESSAGE = "File not found."
+
 def check_correct_format_file(file_contents: str)-> None:
     """checking if the file contains only valid characters - "." and "0" 
 
@@ -16,7 +22,7 @@ def check_correct_format_file(file_contents: str)-> None:
         Raises:
             TypeError: If the file contains invalid characters."""
     for char in file_contents:
-        if not(char == "." or char == "o"):
+        if not char in VALID_FILE_CHARACTERS:
             throw_error("invalid characters in file")
 
 # receive a configuration text file as a .txt file
@@ -35,7 +41,7 @@ def load_starting_configuration(txt_file_name: str) -> np.array:
         Raises:
             FileNotFoundError: if the file name isn't valid"""
     try:
-        with open(txt_file_name, 'r') as f:
+        with open(txt_file_name, 'r', encoding='utf-8') as f:
             file_contents = f.read()  # Read the entire file into a single string
             np_table = [[]]
             check_correct_format_file(file_contents)
@@ -49,13 +55,13 @@ def load_starting_configuration(txt_file_name: str) -> np.array:
 
 
     except FileNotFoundError:
-        print(f"Error: The file " + txt_file_name + " was not found.")
+        print(FILE_NOT_FOUND_MESSAGE)
 
     return np_table
 
 
 # prints current state of the simulation
-def print_simulation(current_state: numpy.array, current_iteration: int) -> None:
+def print_simulation(current_state: np.array, current_iteration: int) -> None:
     """function to print the current iteration of the gol
 
         Args:
@@ -88,13 +94,35 @@ def determine_cell_state(live_cnt: int, current_value: int) -> chr:
         Raises:
             None"""
     if live_cnt == 3:
-        return "o"
+        return LIVE_CELL_SYMBOL
     if live_cnt == 2:
         return current_value
-    return "."
+    return DEAD_CELL_SYMBOL
+
+def check_validity_of_coordiantes(row: int, col: int, row_add: int, col_add: int) -> bool:
+    """function that checks if the coordinates are valid
+        coordinates in the game table to check neighbouring cells
+
+        Args:
+            row: current row to check
+            col: current column to check
+            row_add: current parameter to add to the row
+            col_add: current parameter to add to the column
+
+        Returns:
+           True if the coordinates are valid to check
+           False otherwise
+        Raises:
+            None"""
+    # make sure no to compare the cell to itself
+    if row_add != 0 or col_add != 0:
+        # make sure we check neighbours that exist in the board
+        if (row + row_add) >= 0 and (col + col_add >= 0):
+            return True
+    return False
 
 # helper function to update te state of a current cell in the simulation
-def helper_current_cell(current_iteration: numpy.array, row: int, col: int) -> chr:
+def helper_current_cell(current_iteration: np.array, row: int, col: int) -> chr:
     """used for determining the value of a cell in the next iteration of the program
 
         Args:
@@ -115,11 +143,8 @@ def helper_current_cell(current_iteration: numpy.array, row: int, col: int) -> c
         for col_add in range(-1, 2):
             try:
                 # make sure no to compare the cell to itself
-                if row_add != 0 or col_add != 0:
-                    # make sure we check neighbours that exist in the board
-                    if (row + row_add) >= 0 and (col + col_add >= 0):
-                        if current_iteration[row + row_add][col + col_add] == 'o':
-                            live_cnt += 1
+                if check_validity_of_coordiantes(row, col, row_add, col_add):
+                    live_cnt += 1
             except IndexError:
                 pass
         row_add += 1
@@ -129,7 +154,7 @@ def helper_current_cell(current_iteration: numpy.array, row: int, col: int) -> c
 
 # update iteration of the game
 # returns the next iteration
-def update_iteration(current_iteration: int) -> numpy.array:
+def update_iteration(current_iteration: int) -> np.array:
     """returns the game board in the next iteration based on the current one
 
         Args:
