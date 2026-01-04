@@ -141,7 +141,6 @@ def update_iteration(current_iteration: int) -> np.array:
 
         Returns:
            game board in the next iteration based on the current one
-
         """
     next_iteration = [[]]
     for row in range(len(current_iteration)):
