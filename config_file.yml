@@ -1,5 +1,6 @@
-R_herbivore_sight: 0
-R_predator_sight: 0
+R_sights:
+  R_herbivore_sight: 3
+  R_predator_sight: 3
 Types:
   1: Plant
   2: Herbivore

@@ -64,7 +64,3 @@ class GameBoard:
                     self.delete_entity(row,col)
                 else:
                     self.board[row][col].update_iteration(self.board, row, col)
-
-
-
-
