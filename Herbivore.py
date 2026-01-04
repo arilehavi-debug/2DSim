@@ -1,6 +1,6 @@
 import MobileEntity
 
-class Plant (MobileEntity):
+class Herbivore(MobileEntity):
     def __init__(self, location, life_span):
         self.life_span = life_span
         self.location = location

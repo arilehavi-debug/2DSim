@@ -16,6 +16,5 @@ class MobileEntity(Entity):
     def update_location(self, new_location):
         self.location = new_location
 
-
     def update_iteration(self, curr_board, location):
         pass

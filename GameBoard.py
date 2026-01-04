@@ -1,4 +1,5 @@
 import MobileEntity
+import Plant
 import yaml
 import random
 from numpy.f2py.auxfuncs import throw_error
@@ -16,7 +17,7 @@ def parse_config_file(config_file_name):
 def init_live_objects_counter(config_dict):
     object_ctr_dict = {}
     for i in range(len(config_dict["TypesStrings"])):
-        object_ctr_dict[i] = 0
+        object_ctr_dict[config_dict["Types"][i]] = 0
     return object_ctr_dict
 
 class GameBoard:
@@ -40,7 +41,7 @@ class GameBoard:
                     self.const_dict["Types"][random]((row, col),
                                                      self.const_dict["LifeSpan"][curr_type]))
                 # update counter for live objects of a certain type
-                self.live_objects_counter[curr_type] += 1
+                self.live_objects_counter[self.const_dict["Types"][curr_type]] += 1
 
     def check_if_entity_life_span_ended(self, row, col):
         if (self.board[row][col].life_span - 1) == 0:
@@ -48,14 +49,22 @@ class GameBoard:
             return True
         return False
 
+    def delete_entity(self, row, col):
+        self.live_objects_counter[type(self.board[row][col])] -= 1
+        del self.board[row][col]
+        self.board[row][col] = Plant((row,col), self.const_dict["LifeSpans"][1]) #if a space evacuated we add a Plant
+        self.live_objects_counter[Plant] += 1 #making sure the number of pants counter is updated
+
     def update_game_board(self):
         for row in range(len(self.board)):
             for col in range(len(self.board[0])):
                 if self.check_if_entity_life_span_ended(row,col):
                     # in case the entity's life span ended
-                    # we update the lives counter and add another entity
-                    
+                    # we update its type lives counter and add a plant instead
+                    self.delete_entity(row,col)
+                else:
+                    self.board[row][col].update_iteration(self.board, row, col)
 
-                # if the object should terminate itself
+
 
 
