@@ -1,4 +1,6 @@
-import numpy
+"""
+this module is in charge of the logic of running the basic gol program
+"""
 import numpy as np
 from numpy.f2py.auxfuncs import throw_error
 
@@ -110,15 +112,17 @@ def helper_current_cell(current_iteration: numpy.array, row: int, col: int) -> c
 
     # continue counter until we end the process of counting neighbours
     while row_add != 2:
-            for col_add in range(-1, 2):
-                try:
-                    if row_add != 0 or col_add != 0: # checking we arent comparing the cell to itself
-                        if (row + row_add) >= 0 and (col + col_add >= 0):
-                            if current_iteration[row + row_add][col + col_add] == 'o':
-                                live_cnt += 1
-                except IndexError:
-                    pass
-            row_add += 1
+        for col_add in range(-1, 2):
+            try:
+                # make sure no to compare the cell to itself
+                if row_add != 0 or col_add != 0:
+                    # make sure we check neighbours that exist in the board
+                    if (row + row_add) >= 0 and (col + col_add >= 0):
+                        if current_iteration[row + row_add][col + col_add] == 'o':
+                            live_cnt += 1
+            except IndexError:
+                pass
+        row_add += 1
 
     return determine_cell_state(live_cnt, current_iteration[row][col])
 
@@ -140,5 +144,6 @@ def update_iteration(current_iteration: int) -> numpy.array:
     for row in range(len(current_iteration)):
         for col in range(len(current_iteration[0])):
             next_iteration[-1].append(helper_current_cell(current_iteration, row, col))
+
         next_iteration.append([])
     return np.array(next_iteration[:-1])
