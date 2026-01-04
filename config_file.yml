@@ -1,0 +1,14 @@
+R_herbivore_sight: 0
+R_predator_sight: 0
+Types:
+  1: Plant
+  2: Herbivore
+  3: Predator
+TypesStrings:
+  1: "Plant"
+  2: "Herbivore"
+  3: "Predator"
+LifeSpans:
+  1: 5 #max life span of plant
+  2: 5 #max life span of herbivore
+  3: 5 #max life span of predator

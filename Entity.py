@@ -20,8 +20,5 @@ class Entity(ABC):
     def update_iteration(self, curr_board, location):
         pass
 
-    @abstractmethod
-    def parse_config_file(self, config_file_name):
-        pass
 
 
