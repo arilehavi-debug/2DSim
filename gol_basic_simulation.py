@@ -25,9 +25,6 @@ def check_correct_format_file(file_contents: str)-> None:
         if not char in VALID_FILE_CHARACTERS:
             throw_error("invalid characters in file")
 
-# receive a configuration text file as a .txt file
-# return a numpy array that holds the configuration content
-
 def load_starting_configuration(txt_file_name: str) -> np.array:
     """receive a configuration text file as a .txt file
     return a numpy array that holds the configuration content
@@ -45,7 +42,6 @@ def load_starting_configuration(txt_file_name: str) -> np.array:
             file_contents = f.read()  # Read the entire file into a single string
             np_table = [[]]
             check_correct_format_file(file_contents)
-            # read contents of table and check that it's in the correct format
             for char in file_contents:
                 if char == '\n':
                     np_table.append([])
@@ -53,14 +49,12 @@ def load_starting_configuration(txt_file_name: str) -> np.array:
                     np_table[-1].append(char)
             return np.array(np_table)
 
-
     except FileNotFoundError:
         print(FILE_NOT_FOUND_MESSAGE)
 
     return np_table
 
 
-# prints current state of the simulation
 def print_simulation(current_state: np.array, current_iteration: int) -> None:
     """function to print the current iteration of the gol
 
@@ -74,12 +68,9 @@ def print_simulation(current_state: np.array, current_iteration: int) -> None:
         Raises:
             None"""
     print("current iteration: ", current_iteration)
-    # print every row for itself
     for row in current_state:
         print(*row)
 
-
-# determine wether the current cell should be dead or alive in the next iteration
 def determine_cell_state(live_cnt: int, current_value: int) -> chr:
     """function to return relevant character for one cell in accordance to
         the number of live cells adjacent to it
@@ -114,14 +105,11 @@ def check_validity_of_coordiantes(row: int, col: int, row_add: int, col_add: int
            False otherwise
         Raises:
             None"""
-    # make sure no to compare the cell to itself
     if row_add != 0 or col_add != 0:
-        # make sure we check neighbours that exist in the board
         if (row + row_add) >= 0 and (col + col_add >= 0):
             return True
     return False
 
-# helper function to update te state of a current cell in the simulation
 def helper_current_cell(current_iteration: np.array, row: int, col: int) -> chr:
     """used for determining the value of a cell in the next iteration of the program
 
@@ -135,14 +123,12 @@ def helper_current_cell(current_iteration: np.array, row: int, col: int) -> chr:
 
         Raises:
             None"""
-    live_cnt = 0 #counter for live cells that are adjacent to the current cell
+    live_cnt = 0
     row_add = -1
 
-    # continue counter until we end the process of counting neighbours
     while row_add != 2:
         for col_add in range(-1, 2):
             try:
-                # make sure no to compare the cell to itself
                 if check_validity_of_coordiantes(row, col, row_add, col_add):
                     if current_iteration[row +row_add][col + col_add] == LIVE_CELL_SYMBOL:
                         live_cnt += 1
@@ -152,9 +138,6 @@ def helper_current_cell(current_iteration: np.array, row: int, col: int) -> chr:
 
     return determine_cell_state(live_cnt, current_iteration[row][col])
 
-
-# update iteration of the game
-# returns the next iteration
 def update_iteration(current_iteration: int) -> np.array:
     """returns the game board in the next iteration based on the current one
 
