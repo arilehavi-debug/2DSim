@@ -19,8 +19,7 @@ def check_correct_format_file(file_contents: str)-> None:
         Returns:
            nothing.
 
-        Raises:
-            TypeError: If the file contains invalid characters."""
+        """
     for char in file_contents:
         if not char in VALID_FILE_CHARACTERS:
             throw_error("invalid characters in file")
@@ -35,8 +34,7 @@ def load_starting_configuration(txt_file_name: str) -> np.array:
         Returns:
            numpy array representing the table
 
-        Raises:
-            FileNotFoundError: if the file name isn't valid"""
+        """
     try:
         with open(txt_file_name, 'r', encoding='utf-8') as f:
             file_contents = f.read()  # Read the entire file into a single string
@@ -65,8 +63,7 @@ def print_simulation(current_state: np.array, current_iteration: int) -> None:
         Returns:
            None
 
-        Raises:
-            None"""
+        """
     print("current iteration: ", current_iteration)
     for row in current_state:
         print(*row)
@@ -82,8 +79,7 @@ def determine_cell_state(live_cnt: int, current_value: int) -> chr:
         Returns:
            new value of the cell
 
-        Raises:
-            None"""
+        """
     if live_cnt == 3:
         return LIVE_CELL_SYMBOL
     if live_cnt == 2:
@@ -103,8 +99,8 @@ def check_validity_of_coordiantes(row: int, col: int, row_add: int, col_add: int
         Returns:
            True if the coordinates are valid to check
            False otherwise
-        Raises:
-            None"""
+
+        """
     if row_add != 0 or col_add != 0:
         if (row + row_add) >= 0 and (col + col_add >= 0):
             return True
@@ -121,8 +117,7 @@ def helper_current_cell(current_iteration: np.array, row: int, col: int) -> chr:
         Returns:
            needed value of the cell in the next iteration
 
-        Raises:
-            None"""
+        """
     live_cnt = 0
     row_add = -1
 
@@ -147,8 +142,7 @@ def update_iteration(current_iteration: int) -> np.array:
         Returns:
            game board in the next iteration based on the current one
 
-        Raises:
-            None"""
+        """
     next_iteration = [[]]
     for row in range(len(current_iteration)):
         for col in range(len(current_iteration[0])):
