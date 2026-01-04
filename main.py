@@ -1,6 +1,7 @@
-# This is a sample Python script.
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+"""
+this module is the main function to run the gol and present it to screen
+it uses functions from gol_basic_simulation.py
+"""
 import gol_basic_simulation
 
 # Press the green button in the gutter to run the script.
