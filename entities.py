@@ -15,7 +15,6 @@ total_plants_counter = 0
 total_herbivores_counter = 0
 total_predators_counter = 0
 
-
 def create_new_entity(curr_board, location):
     global total_plants_counter
     global total_herbivores_counter
@@ -120,6 +119,9 @@ class Herbivore(BasicEntity):
         if self.terminate_myself(curr_board, location):
             total_herbivores_counter -= 1
         else:
+            pass
+
+
 
 
 class Predator(BasicEntity):
