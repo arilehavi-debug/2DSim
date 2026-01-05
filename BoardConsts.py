@@ -7,6 +7,7 @@ from types import NoneType
 class BoardConsts:
     CONST_DICT = {1: Plant, 2: Herbivore, 3: Predator, 4: Human}
     PRINT_DICT = {Plant: "T", Herbivore: "H", Predator: "P", Human: "O", NoneType: "N"}
+    TYPE_CODING = {"T": Plant, "H": Herbivore, "P": Predator, "O": Human, "N": NoneType}
     STR_TYPE_DICT = {1: "Plant", 2: "Herbivore", 3: "Predator", 4: "Human"}
     TOTAL_ROWS = 5
     TOTAL_COLS = 5

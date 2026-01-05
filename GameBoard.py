@@ -8,28 +8,27 @@ from BoardConsts import BoardConsts
 import yaml
 import random
 
-def create_board(total_rows, total_cols):
-    board = []
-    for row in range(total_rows):
-        board.append([])
-        for col in range(total_cols):
-            # drill a random entity to init the game board
-            # select a type to initiate of
-            curr_type = random.randint(1, len(BoardConsts.CONST_DICT))
-            board[-1].append(BoardConsts.CONST_DICT[curr_type]((row, col)))
-    return board
-
 class GameBoard:
 
     def __init__(self):
         self.live_objects_counter = {Plant: 0, Herbivore: 0, Predator: 0, Human: 0}
-        self.board = create_board(BoardConsts.TOTAL_ROWS, BoardConsts.TOTAL_COLS)
+        self.board = self.create_board_from_yaml("test_file.yml")
 
     def create_board_from_yaml(self,filename):
         board = []
         yaml_string = ""
         with open(filename, 'r') as file:
-            yaml_string = file.read()
+            yaml_string = yaml.safe_load(file)
+
+        board_by_rows = yaml_string["Board Configuration"]
+        board_by_rows = board_by_rows.split("\n")
+
+        for row in range(len(board_by_rows)):
+            board.append([])
+            for col in range(len(board_by_rows[row])):
+                board[-1].append(BoardConsts.TYPE_CODING[board_by_rows[row][col]]((row, col)))
+
+        return board
 
     def check_if_entity_life_span_ended(self, row, col):
         if self.board[row][col].life_span == 0:
