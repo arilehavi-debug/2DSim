@@ -9,6 +9,7 @@ if __name__ == '__main__':
     total_turns = 10
     game_board = GameBoard()
     print("starting board position:")
+    game_board.create_board_from_yaml("C:\\Users\\King Yair\\Documents\\Ofek\\2DSim_new\\test_file.yaml")
     game_board.print_game_board()
     for current_turn in range(1, total_turns):
         print("current turn: " + str(current_turn))

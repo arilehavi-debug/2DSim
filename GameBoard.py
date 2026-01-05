@@ -19,14 +19,17 @@ def create_board(total_rows, total_cols):
             board[-1].append(BoardConsts.CONST_DICT[curr_type]((row, col)))
     return board
 
-def load_board_from_yaml(filename):
-    pass
-
 class GameBoard:
 
     def __init__(self):
         self.live_objects_counter = {Plant: 0, Herbivore: 0, Predator: 0, Human: 0}
         self.board = create_board(BoardConsts.TOTAL_ROWS, BoardConsts.TOTAL_COLS)
+
+    def create_board_from_yaml(self,filename):
+        board = []
+        yaml_string = ""
+        with open(filename, 'r') as file:
+            yaml_string = file.read()
 
     def check_if_entity_life_span_ended(self, row, col):
         if self.board[row][col].life_span == 0:
