@@ -1,16 +1,2 @@
-R_sights:
-  R_herbivore_sight: 3
-  R_predator_sight: 3
-T_cooldown: 3
-Types:
-  1: Plant
-  2: Herbivore
-  3: Predator
-TypesStrings:
-  1: "Plant"
-  2: "Herbivore"
-  3: "Predator"
-LifeSpans:
-  1: 5 #max life span of plant
-  2: 5 #max life span of herbivore
-  3: 5 #max life span of predator
+Board Configuration:
+

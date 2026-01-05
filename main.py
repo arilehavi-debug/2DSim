@@ -2,29 +2,16 @@
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 from code_from_previous_branches import gol_basic_simulation
+from GameBoard import GameBoard
 import yaml
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-
-    # game_configuartion = gol_basic_simulation.load_starting_configuration("tests/beacon.txt")
-    # total_iterations = int(input("Please enter valid iterations number: "))
-    #
-    # for current_iteration in range(total_iterations + 1):
-    #     # print current state of screen
-    #     gol_basic_simulation.print_simulation(game_configuartion, current_iteration)
-    #     # update table
-    #     game_configuartion = gol_basic_simulation.update_iteration(game_configuartion)
-    #     # iterate forward
-    #     current_iteration += 1
-    # code for loading the info
-    data = {""
-
-        }
-
-    with open('new_config.yaml', 'w') as file:
-        yaml.dump(data, file, sort_keys=False)
-
-
-
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    total_turns = 10
+    game_board = GameBoard()
+    print("starting board position:")
+    game_board.print_game_board()
+    for current_turn in range(1, total_turns):
+        print("current turn: " + str(current_turn))
+        game_board.update_game_board()
+        game_board.print_game_board()
+        game_board.print_counter_of_all_entities()

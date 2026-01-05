@@ -1,66 +1,84 @@
-import MobileEntity
-import Plant
+from types import NoneType
+
+from Plant import Plant
+from Human import Human
+from Predator import Predator
+from Herbivore import Herbivore
+from BoardConsts import BoardConsts
 import yaml
 import random
-from numpy.f2py.auxfuncs import throw_error
 
-MESSAGE_NO_OBJECTS_OF_TYPE_LEFT = "Alert! there aren't any objects left of type: "
+def create_board(total_rows, total_cols):
+    board = []
+    for row in range(total_rows):
+        board.append([])
+        for col in range(total_cols):
+            # drill a random entity to init the game board
+            # select a type to initiate of
+            curr_type = random.randint(1, len(BoardConsts.CONST_DICT))
+            board[-1].append(BoardConsts.CONST_DICT[curr_type]((row, col)))
+    return board
 
-def parse_config_file(config_file_name):
-    try:
-        with open(config_file_name, 'r') as f:
-            return yaml.safe_load(f)
-
-    except FileNotFoundError:
-        throw_error(FileNotFoundError)
-
-def init_live_objects_counter(config_dict):
-    object_ctr_dict = {}
-    for i in range(len(config_dict["TypesStrings"])):
-        object_ctr_dict[config_dict["Types"][i]] = 0
-    return object_ctr_dict
+def load_board_from_yaml(filename):
+    pass
 
 class GameBoard:
-    const_dict = {}
-    live_objects_counter = {} #format of counters is number to represent the type
 
-    def __init__(self, rows, cols, route_to_config_file):
-        self.const_dict = parse_config_file(route_to_config_file)
-        self.live_objects_counter = init_live_objects_counter(self.const_dict)
-        self.board = []
-
-        # we make sure to create the game board
-        # as a 2D array of Entities
-        for row in range(rows):
-            self.board.append([])
-            for col in range(cols):
-                # drill a random entity to init the game board
-                # select a type to initiate of
-                curr_type = random.randint(1, len(self.const_dict["Types"]))
-                self.board[-1].append(
-                    self.const_dict["Types"][random]((row, col),
-                                                     self.const_dict["LifeSpan"][curr_type]))
-                # update counter for live objects of a certain type
-                self.live_objects_counter[self.const_dict["Types"][curr_type]] += 1
+    def __init__(self):
+        self.live_objects_counter = {Plant: 0, Herbivore: 0, Predator: 0, Human: 0}
+        self.board = create_board(BoardConsts.TOTAL_ROWS, BoardConsts.TOTAL_COLS)
 
     def check_if_entity_life_span_ended(self, row, col):
-        if (self.board[row][col].life_span - 1) == 0:
-            self.board[row][col].update_life_span(0)
+        if self.board[row][col].life_span == 0:
             return True
         return False
 
-    def delete_entity(self, row, col):
-        self.live_objects_counter[type(self.board[row][col])] -= 1
-        del self.board[row][col]
-        self.board[row][col] = Plant((row,col), self.const_dict["LifeSpans"][1]) #if a space evacuated we add a Plant
-        self.live_objects_counter[Plant] += 1 #making sure the number of plants counter is updated
+    def fill_with_plants_if_needed(self):
+        for row in range(len(self.board)):
+            for col in range(len(self.board[0])):
+                if self.board[row][col] == None:
+                    # drill if we want to create a Plant or not
+                    if random.randint(1, 2) == 1:
+                        self.board[row][col] = Plant((row, col))
+
+    def print_counter_of_all_entities(self):
+        for i in range(1, len(BoardConsts.STR_TYPE_DICT) + 1):
+            print("Total entities from type " + BoardConsts.STR_TYPE_DICT[i] +": " +
+                  str(self.live_objects_counter[BoardConsts.CONST_DICT[i]]))
+
+    def update_game_life_counter(self):
+        # nullify all organs
+        for key in self.live_objects_counter.keys():
+            self.live_objects_counter[key] = 0
+
+        for row in range(len(self.board)):
+            for col in range(len(self.board[0])):
+                if self.board[row][col] == None:
+                    # drill if we want to create a Plant or not
+                    if random.randint(1, 2) == 1:
+                        self.board[row][col] = Plant((row, col))
+                        self.live_objects_counter[type(self.board[row][col])] += 1
+                else:
+                    self.live_objects_counter[type(self.board[row][col])] += 1
+
+    def print_game_board(self):
+        for row in range(len(self.board)):
+            for col in range(len(self.board[0])):
+                    print(BoardConsts.PRINT_DICT[type(self.board[row][col])], end="")
+            print("\n", end="")
 
     def update_game_board(self):
         for row in range(len(self.board)):
             for col in range(len(self.board[0])):
-                if self.check_if_entity_life_span_ended(row,col):
-                    # in case the entity's life span ended
-                    # we update its type lives counter and add a plant instead
-                    self.delete_entity(row,col)
-                else:
-                    self.board[row][col].update_iteration(self.board, row, col)
+                if self.board[row][col] != None:
+                    if self.check_if_entity_life_span_ended(row,col):
+                        # in case the entity's life span ended
+                        # we update the board and turn it to None
+                        self.board[row][col] = None
+                    else:
+                        self.board[row][col].update_iteration(self.board, (row, col))
+
+        # update live objects counter of any type
+        # decide if to drill a Plant or not
+        self.fill_with_plants_if_needed()
+        self.update_game_life_counter()

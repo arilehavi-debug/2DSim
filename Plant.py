@@ -1,8 +1,14 @@
-import Entity
+from Entity import Entity
+T_plant = 5
 
 class Plant (Entity):
+
     def __init__(self, location, life_span):
         self.life_span = life_span
+        self.location = location
+
+    def __init__(self, location):
+        self.life_span = T_plant
         self.location = location
 
     def update_life_span(self, new_life_span):
