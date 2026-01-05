@@ -1,6 +1,6 @@
-import MobileEntity
+import Entity
 
-class Plant (MobileEntity):
+class Plant (Entity):
     def __init__(self, location, life_span):
         self.life_span = life_span
         self.location = location

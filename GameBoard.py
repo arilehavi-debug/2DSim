@@ -53,7 +53,7 @@ class GameBoard:
         self.live_objects_counter[type(self.board[row][col])] -= 1
         del self.board[row][col]
         self.board[row][col] = Plant((row,col), self.const_dict["LifeSpans"][1]) #if a space evacuated we add a Plant
-        self.live_objects_counter[Plant] += 1 #making sure the number of pants counter is updated
+        self.live_objects_counter[Plant] += 1 #making sure the number of plants counter is updated
 
     def update_game_board(self):
         for row in range(len(self.board)):

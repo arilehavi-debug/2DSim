@@ -16,9 +16,6 @@ class Entity(ABC):
     def update_iteration(self, curr_board, location):
             pass
 
-    @abstractmethod
-    def update_iteration(self, curr_board, location):
-        pass
 
 
 
