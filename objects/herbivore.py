@@ -2,7 +2,7 @@ from objects.mobile_entity import MobileEntity
 from objects.entity import Entity
 from lib_consts.const_file import R_HERBIVORE_SIGHT, T_HERBIVORE, T_COOLDOWN
 from objects.plant import Plant
-from event_handling import EventManager
+from event_handling.event_managaer import EventManager
 
 
 class Herbivore(MobileEntity):
@@ -19,8 +19,7 @@ class Herbivore(MobileEntity):
         self.location = location
         self.curr_cooldown_time = 0
 
-    def create_new_herbivore(self, curr_board: list[list[Entity]], location: tuple[int, int]) \
-            -> None:
+    def create_new_herbivore(self, curr_board: list[list[Entity]], location: tuple[int, int], mngr: EventManager) -> None:
         """Creating a new herbivore in a different location
 
             Args:
@@ -31,7 +30,7 @@ class Herbivore(MobileEntity):
         curr_board[location[0]][location[1]] = Herbivore(location)
 
     def update_iteration(self, curr_board: list[list[Entity]], location: tuple[int, int],
-                         event_manager: EventManager) -> None:
+                         mngr: EventManager) -> None:
         """Updating the herbivore entity after every iteration
 
             Args:
@@ -52,7 +51,7 @@ class Herbivore(MobileEntity):
                     self._get_random_nearing_location_in_board(curr_board, optional_loc))
                 self.create_new_herbivore(curr_board, new_herbivore_location)
 
-        self.update_location_in_game_board(curr_board, location, optional_loc)
+        self.update_location_in_game_board(curr_board, location, optional_loc, mngr)
         self.life_span -= 1
         if self.curr_cooldown_time > 0:
             self.curr_cooldown_time -= 1

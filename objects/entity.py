@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from event_handling import EventManager
+from event_handling.event_managaer import EventManager
 
 
 class Entity(ABC):

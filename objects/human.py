@@ -2,7 +2,7 @@ from objects.entity import Entity
 from objects.predator import Predator
 from lib_consts.const_file import T_HUMAN, R_HUMAN_SIGHT
 from objects.mobile_entity import MobileEntity
-from event_handling import EventManager
+from event_handling.event_managaer import EventManager
 
 
 class Human(MobileEntity):
@@ -22,7 +22,7 @@ class Human(MobileEntity):
         self.location = location
 
     def update_iteration(self, curr_board: list[list[Entity]], location: tuple[int, int],
-                         event_manager: EventManager) -> None:
+                         mngr: EventManager) -> None:
         """Updating the Human entity after every iteration
             When he reaches a predator, he consumes it - refueling his life span
             When he reaches another human, he multiplies - and creates 2 new humans in
@@ -54,6 +54,5 @@ class Human(MobileEntity):
             curr_board[new_human_created_2[0]][new_human_created_2[1]] = \
                 Human(new_human_created_2)
 
-        self.update_location_in_game_board(curr_board, location, optional_loc)
-
+        self.update_location_in_game_board(curr_board, location, optional_loc, mngr)
         self.life_span -= 1

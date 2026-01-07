@@ -2,7 +2,7 @@ from objects.herbivore import Herbivore
 from objects.entity import Entity
 from objects.mobile_entity import MobileEntity
 from lib_consts.const_file import T_PREDATOR, R_PREDATOR_SIGHT
-from event_handling import EventManager
+from event_handling.event_managaer import EventManager
 
 
 class Predator(MobileEntity):
@@ -19,7 +19,7 @@ class Predator(MobileEntity):
         self.location = location
 
     def update_iteration(self, curr_board: list[list[Entity]], location: tuple[int, int],
-                         event_manager: EventManager) -> None:
+                         mngr: EventManager) -> None:
         """Updating the Predator entity after every iteration
             Args:
                 curr_board: current board of the game
@@ -32,7 +32,6 @@ class Predator(MobileEntity):
         if self.check_if_needed_to_refuel_life_span(curr_board, optional_loc[0], optional_loc[1],
                                                     Herbivore):
             self.life_span = T_PREDATOR
-            event_manager.notify("A predator killed a herbivore")
 
-        self.update_location_in_game_board(curr_board, location, optional_loc)
+        self.update_location_in_game_board(curr_board, location, optional_loc, mngr)
         self.life_span -= 1

@@ -1,4 +1,5 @@
 import logging
+from typing import Callable
 
 from event_handling.observer import Observer
 
@@ -16,23 +17,30 @@ class EventManager:
         """
         Constructor for class "EventManager"
         """
-        self._observers = []
+        self._observers = {}
 
-    def subscribe(self, observer: Observer) -> None:
+    def subscribe(self, observer: Observer, event_types: list[(str, Callable)]) -> None:
         """
         function to allow subscribing for an event happening
         Args:
          observer: object wanting to subscribe for a certain event
         :return:
         """
-        self._observers.append(observer)
+        for (event, func) in event_types:
+            if event in self._observers.keys():
+                self._observers[event].append((observer, func))
+            else:
+                self._observers[event] = [(observer, func)]
         logging.info("Observer subscribed")
 
-    def notify(self, event: str) -> None:
+    def notify(self, event: str, **kwargs) -> None:
         """
         notifying to all subscribers over an event happening
         Args:
             event: a string informing an event happening on screen
         """
-        for observer in self._observers:
-            observer.on_event(event)
+        for (observer, function) in self._observers[event]:
+            if len(kwargs) > 0:
+                function(observer, kwargs)
+            else:
+                function(observer)

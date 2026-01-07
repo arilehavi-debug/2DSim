@@ -1,6 +1,7 @@
 import random as rnd
 import numpy as np
 
+from event_handling.event_managaer import EventManager
 from objects.entity import Entity
 
 
@@ -173,7 +174,7 @@ class MobileEntity(Entity):
 
     def update_location_in_game_board(self, curr_board: list[list[bool]],
                                       curr_location: tuple[int, int],
-                                      new_location: tuple[int, int]) -> None:
+                                      new_location: tuple[int, int], mngr:EventManager) -> None:
         """
         Updating entity's location
         Args:
