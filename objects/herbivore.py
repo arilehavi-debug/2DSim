@@ -1,21 +1,19 @@
-"""
-this module contains class Herbivore
-"""
-from mobile_entity import MobileEntity
-from entity import Entity
-from const_file import R_HERBIVORE_SIGHT, T_HERBIVORE, T_COOLDOWN
-from plant import Plant
+from objects.mobile_entity import MobileEntity
+from objects.entity import Entity
+from lib_consts.const_file import R_HERBIVORE_SIGHT, T_HERBIVORE, T_COOLDOWN
+from objects.plant import Plant
+from event_handling import EventManager
 
 
 class Herbivore(MobileEntity):
     """
-    class for type "Herbivore"
-    contains all signatures for needed functions to object of type "Herbivore"
+    Class for type "Herbivore"
+    Contains all signatures for needed functions to object of type "Herbivore"
     """
 
     def __init__(self, location: tuple[int, int], life_span: int = T_HERBIVORE):
         """
-         constructor that initializes the class
+         Constructor that initializes the class
         """
         self.life_span = life_span
         self.location = location
@@ -23,21 +21,22 @@ class Herbivore(MobileEntity):
 
     def create_new_herbivore(self, curr_board: list[list[Entity]], location: tuple[int, int]) \
             -> None:
-        """creating a new herbivore in a different location
+        """Creating a new herbivore in a different location
 
-                Args:
-                    curr_board: current board of the game
-                    location: tuple representing the cell to create a new herbivore in
+            Args:
+                curr_board: current board of the game
+                location: tuple representing the cell to create a new herbivore in
 
         """
         curr_board[location[0]][location[1]] = Herbivore(location)
 
-    def update_iteration(self, curr_board: list[list[Entity]], location: tuple[int, int]) -> None:
-        """updating the herbivore entity after every iteration
+    def update_iteration(self, curr_board: list[list[Entity]], location: tuple[int, int],
+                         event_manager: EventManager) -> None:
+        """Updating the herbivore entity after every iteration
 
-                Args:
-                    curr_board: current board of the game
-                    location: tuple representing the current cell a herbivore is in
+            Args:
+                curr_board: current board of the game
+                location: tuple representing the current cell a herbivore is in
 
         """
         optional_loc = self.determine_next_location(curr_board, location, R_HERBIVORE_SIGHT, Plant)
