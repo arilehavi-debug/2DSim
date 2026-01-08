@@ -1,32 +1,32 @@
 from objects.entity import Entity
 from objects.predator import Predator
-from lib_consts.const_file import T_HUMAN, R_HUMAN_SIGHT
 from objects.mobile_entity import MobileEntity
-from event_handling.event_managaer import EventManager
+from lib_consts.const_file import T_HUMAN, R_HUMAN_SIGHT
+from event_handling.event_manager import EventManager
 
 
 class Human(MobileEntity):
     """
-    Class for type "Human"
-    Contains all signatures for needed functions to object of type "Human"
-    When a human reaches a predator, it consumes the predator - refueling his life span
+    Class for type "Human".
+    Contains all signatures for needed functions to object of type "Human".
+    When a human reaches a predator, it consumes the predator - refueling his life span.
     When a human reaches another human, it multiplies - and creates 2 new humans in random
-    nearing location
+    nearing location.
     """
 
     def __init__(self, location: tuple[int, int], life_span: int = T_HUMAN):
         """
-         Constructor that initializes the class
+        Constructor that initializes the class
         """
         self.life_span = life_span
         self.location = location
 
     def update_iteration(self, curr_board: list[list[Entity]], location: tuple[int, int],
                          mngr: EventManager) -> None:
-        """Updating the Human entity after every iteration
-            When he reaches a predator, he consumes it - refueling his life span
+        """Updating the Human entity after every iteration.
+            When he reaches a predator, he consumes it - refueling his life span.
             When he reaches another human, he multiplies - and creates 2 new humans in
-            random nearing locations
+            random nearing locations.
 
             Args:
                 curr_board: current board of the game
@@ -48,6 +48,13 @@ class Human(MobileEntity):
             while new_human_created_1 == new_human_created_2:
                 new_human_created_2 = \
                     self._get_random_nearing_location_in_board(curr_board, optional_loc)
+
+            mngr.notify("entity reduced",
+                             type=
+                             type(curr_board[new_human_created_1[0]][new_human_created_1[1]]))
+            mngr.notify("entity reduced",
+                             type=
+                             type(curr_board[new_human_created_2[0]][new_human_created_2[1]]))
 
             curr_board[new_human_created_1[0]][new_human_created_1[1]] = \
                 Human(new_human_created_1)

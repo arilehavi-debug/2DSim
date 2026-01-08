@@ -1,6 +1,6 @@
 from objects.entity import Entity
 from lib_consts.const_file import T_PLANT
-from event_handling.event_managaer import EventManager
+from event_handling.event_manager import EventManager
 
 
 class Plant(Entity):

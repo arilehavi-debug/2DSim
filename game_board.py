@@ -1,5 +1,4 @@
 import random
-from types import NoneType
 
 import yaml
 
@@ -7,7 +6,7 @@ from lib_consts.board_consts import CONST_DICT, PRINT_DICT, \
                                      TYPE_CODING, STR_TYPE_DICT, TEST_FILE_NAME
 from objects.entity import Entity
 from objects.plant import Plant
-from event_handling.event_managaer import EventManager
+from event_handling.event_manager import EventManager
 
 class GameBoard:
     """
@@ -43,8 +42,8 @@ class GameBoard:
             board.append([])
             for col, cell in enumerate(row_data):
                 board[-1].append(TYPE_CODING[cell](row, col))
-                self.mngr.notify("entity added or reduced",
-                                 type=TYPE_CODING[cell], factor="added")
+                self.mngr.notify("entity added",
+                                 type=TYPE_CODING[cell])
         return board
 
     def check_if_entity_life_span_ended(self, row: int, col: int) -> bool:
@@ -86,14 +85,14 @@ class GameBoard:
         self.live_objects_counter = dict.fromkeys(self.live_objects_counter.keys(), 0)
         for row in self.board:
             for cell in row:
-                if cell is not None:
+                if cell:
                     self.live_objects_counter[type(cell)] += 1
-                self.mngr.notify("entity added or reduced", type=type(cell), factor="added")
+                self.mngr.notify("entity added", type=type(cell))
 
 
         # checking if there are entities that aren't left in board
-        for key in self.live_objects_counter.keys():
-            if self.live_objects_counter[key] == 0 and key is not NoneType:
+        for (key, items) in self.live_objects_counter.items():
+            if items == 0 and key:
                 event_manager.notify("no more entities left",
                                      data=f"No more entities left of type: {key}")
 
@@ -107,10 +106,15 @@ class GameBoard:
             print("\n", end="")
 
     def check_precentage_of_plants(self, event_manager: EventManager) -> None:
+        """
+        Function to alert if percentage of plants is bigger than 90 percents.
+        Args:
+            event_manager: objects for alerting observer
+        """
         total_plants = 0
         for row in self.board:
             for cell in row:
-                if type(cell) is Plant:
+                if isinstance(cell, Plant):
                     total_plants += 1
 
         if total_plants > 0.9 * len(self.board) * len(self.board[0]):
@@ -124,7 +128,7 @@ class GameBoard:
         self.mngr.notify("iteration ended")
         for idx_row, row in enumerate(self.board):
             for idx_col, cell in enumerate(row):
-                if self.board[idx_row][idx_col] is not None:
+                if self.board[idx_row][idx_col]:
                     if self.check_if_entity_life_span_ended(idx_row, idx_col):
                         self.board[idx_row][idx_col] = None
                     else:

@@ -2,23 +2,24 @@ from pathlib import Path
 
 from game_board import GameBoard
 from objects.entity import Entity
-from event_handling.console_observer import ConsoleObserver
-from event_handling.event_managaer import EventManager
-from event_handling.live_objects_observer import LiveObjectsObserver
+from event_handling.event_manager import EventManager
+from lib_consts.main_consts import OBSERVER_TYPES_TO_INIT
 
 
 def sign_users_to_events(mngr: EventManager):
-    mngr.subscribe(ConsoleObserver(), [("no more entities left", ConsoleObserver.on_event),
-                                       ("plant percentage exceeds 90 percent", ConsoleObserver.on_event)])
-    mngr.subscribe(LiveObjectsObserver(), [("entity added or reduced", LiveObjectsObserver.on_event),
-                                           ("iteration ended",
-                                            LiveObjectsObserver.finish_iter),
-                                           ("game finished", LiveObjectsObserver.show_statistics_throughout_run)])
+    """
+    Signing all observers in the program
+    for the event manager to handle.
+    Args:
+        mngr: Event manager for the game
+    """
+    for observer in OBSERVER_TYPES_TO_INIT:
+        observer(mngr)
 
 
 def init_event_manger() -> EventManager:
     """
-    Initiating a manager to handle all events in game
+    Initiating a manager to handle all events in game.
     Return:
          event manager to handle all events in game
     """
@@ -28,7 +29,7 @@ def init_event_manger() -> EventManager:
 
 def parse_file_name(file_name: str = 'test_file.yml') -> str:
     """
-    Returns the path to the yaml file needed to parse
+    Returns the path to the yaml file needed to parse.
         Args:
             file_name: name of the yaml file to parse
         Return:
@@ -38,18 +39,18 @@ def parse_file_name(file_name: str = 'test_file.yml') -> str:
     return f"{script_location}/{file_name}"
 
 
-def run_game_iterations(game_board: list[list[Entity]], total_turns: int) -> None:
+def run_game_iterations(board: list[list[Entity]], turns_int_game: int) -> None:
     """
-    Function to run entire game turns as wanted
+    Function to run entire game turns as wanted.
     Args:
-        game_board: initial game board
-        total_turns:  total turns the game would run in
+        board: initial game board
+        turns_int_game:  total turns the game would run in
     """
-    for current_turn in range(1, total_turns + 1):
+    for current_turn in range(1, turns_int_game + 1):
         print("current turn: " + str(current_turn))
-        game_board.update_game_board()
-        game_board.print_game_board()
-        game_board.print_counter_of_all_entities()
+        board.update_game_board()
+        board.print_game_board()
+        board.print_counter_of_all_entities()
 
 
 if __name__ == '__main__':

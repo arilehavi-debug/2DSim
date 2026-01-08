@@ -1,7 +1,7 @@
 import random as rnd
 import numpy as np
 
-from event_handling.event_managaer import EventManager
+from event_handling.event_manager import EventManager
 from objects.entity import Entity
 
 
@@ -15,7 +15,7 @@ class MobileEntity(Entity):
 
     def update_life_span(self, new_life_span: int) -> None:
         """
-        Updating entity's life span
+        Updating entity's life span.
         Args:
             new_life_span: new life span of the object
         """
@@ -23,7 +23,7 @@ class MobileEntity(Entity):
 
     def update_location(self, new_location: tuple[int, int]) -> None:
         """
-        Updating entity's location in board
+        Updating entity's location in board.
         Args:
             new_location: represent location of entity
         """
@@ -32,7 +32,7 @@ class MobileEntity(Entity):
     def _check_valid_coordinates(self, curr_board: list[list[Entity]],
                                  curr_row: int, curr_col: int) -> bool:
         """
-        Function to check if coordinates are inside board
+        Function to check if coordinates are inside board.
         Args:
             curr_board: board game
             curr_row: row to check
@@ -61,7 +61,7 @@ class MobileEntity(Entity):
                                         location_find: tuple[int, int]) -> tuple[int, int] or None:
         """
         Finding an instance of type we're looking for to return the object
-        of type we are looking for
+        of type we are looking for.
         Args:
             curr_board: current game board
             type_to_find: type we are trying to search
@@ -80,7 +80,7 @@ class MobileEntity(Entity):
     def _find_closest_entity(self, curr_board: list[list[Entity]], location: tuple[int, int],
                              radius_to_search: int, type_to_find: type) -> tuple[int, int] or None:
         """
-        Finding closest wanted entity from type "type to find" to our location
+        Finding closest wanted entity from type "type to find" to our location.
         Parameters:
             curr_board: current game board
             location: location to search from
@@ -95,26 +95,26 @@ class MobileEntity(Entity):
                 optional_loc = self._get_new_position_if_type_found(
                     curr_board, type_to_find, location,
                     (location[0] + addition_factor, location[1] + curr_add))
-                if optional_loc is not None:
+                if optional_loc:
                     return optional_loc
 
                 optional_loc = self._get_new_position_if_type_found(
                     curr_board, type_to_find, location,
                     (location[0] - addition_factor, location[1] + curr_add))
-                if optional_loc is not None:
+                if optional_loc:
                     return optional_loc
 
                 optional_loc = self._get_new_position_if_type_found(
                     curr_board, type_to_find, location,
                     (location[0] + curr_add, location[1] - addition_factor))
-                if optional_loc is not None:
+                if optional_loc:
                     return optional_loc
 
                 optional_loc = self._get_new_position_if_type_found(
                     curr_board, type_to_find, location,
                     (location[0] + curr_add, location[1] + addition_factor))
 
-                if optional_loc is not None:
+                if optional_loc:
                     return optional_loc
 
         return optional_loc
@@ -122,7 +122,8 @@ class MobileEntity(Entity):
     def _get_random_nearing_location_in_board(self, curr_board: list[list[Entity]],
                                               location: tuple[int, int]) -> tuple[int, int]:
         """
-        Drill random location inside board next to the location and return it
+        Drill random location inside board
+        next to the location and return it.
         Args:
             curr_board: current game board
             location: current location inside board
@@ -143,7 +144,7 @@ class MobileEntity(Entity):
         """
         Function to return next location in board we are looking for
         If we found an object of type "type to find" we return its position,
-        else we drill a random nearing location and return it
+        else we drill a random nearing location and return it.
         Args:
             curr_board: current game board
             location: current location
@@ -154,18 +155,19 @@ class MobileEntity(Entity):
         """
         curr_loc = self._find_closest_entity \
             (curr_board, location, radius_to_search, type_to_find)
-        if curr_loc is not None:
+        if curr_loc:
             return curr_loc
         return self._get_random_nearing_location_in_board(curr_board, location)
 
     def check_if_needed_to_refuel_life_span(self, curr_board: list[list[Entity]], curr_row: int,
                                             curr_col: int, type_to_check: type) -> bool:
         """
-        Return "true" if we found an object that demands refueling life span, false otherwise
+        Return "true" if we found an object that demands refueling life span,
+        false otherwise.
         Args:
             curr_board: current game board
-            curr_row: int
-            curr_col: int
+            curr_row: curr row of entity
+            curr_col: curr column of entity
             type_to_check: type we want to search for
         Return:
              "true" if life refueling needed, "false" otherwise
@@ -174,14 +176,16 @@ class MobileEntity(Entity):
 
     def update_location_in_game_board(self, curr_board: list[list[bool]],
                                       curr_location: tuple[int, int],
-                                      new_location: tuple[int, int], mngr:EventManager) -> None:
+                                      new_location: tuple[int, int], mngr: EventManager) -> None:
         """
-        Updating entity's location
+        Updating entity's location.
         Args:
             curr_board: current game board
             curr_location: current location of object
             new_location: new location of object
         """
+        mngr.notify("entity reduced",
+                    type=type(curr_board[new_location[0]][new_location[1]]))
         curr_board[new_location[0]][new_location[1]] = self
         curr_board[curr_location[0]][curr_location[1]] = None
         self.location = new_location

@@ -2,7 +2,7 @@ from objects.herbivore import Herbivore
 from objects.entity import Entity
 from objects.mobile_entity import MobileEntity
 from lib_consts.const_file import T_PREDATOR, R_PREDATOR_SIGHT
-from event_handling.event_managaer import EventManager
+from event_handling.event_manager import EventManager
 
 
 class Predator(MobileEntity):
